@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>3 Tab Containers with Animation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      padding: 40px;
+    }
+
+    .tab-container {
+      background: #fff;
+      margin-bottom: 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    .tab-buttons {
+      display: flex;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      background: #eee;
+      transition: background 0.3s;
+    }
+
+    .tab-button.active {
+      background: #fff;
+      font-weight: bold;
+      border-bottom: 2px solid #3498db;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 20px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Tab Container 1 -->
+<div class="tab-container" id="container1">
+  <div class="tab-buttons">
+    <div class="tab-button active" onclick="showTab(0, 'container1')">Tab A</div>
+    <div class="tab-button" onclick="showTab(1, 'container1')">Tab B</div>
+    <div class="tab-button" onclick="showTab(2, 'container1')">Tab C</div>
+  </div>
+  <div class="tab-content active">Content A1</div>
+  <div class="tab-content">Content B1</div>
+  <div class="tab-content">Content C1</div>
+</div>
+
+<!-- Tab Container 2 -->
+<div class="tab-container" id="container2">
+  <div class="tab-buttons">
+    <div class="tab-button active" onclick="showTab(0, 'container2')">Tab A</div>
+    <div class="tab-button" onclick="showTab(1, 'container2')">Tab B</div>
+    <div class="tab-button" onclick="showTab(2, 'container2')">Tab C</div>
+  </div>
+  <div class="tab-content active">Content A2</div>
+  <div class="tab-content">Content B2</div>
+  <div class="tab-content">Content C2</div>
+</div>
+
+<!-- Tab Container 3 -->
+<div class="tab-container" id="container3">
+  <div class="tab-buttons">
+    <div class="tab-button active" onclick="showTab(0, 'container3')">Tab A</div>
+    <div class="tab-button" onclick="showTab(1, 'container3')">Tab B</div>
+    <div class="tab-button" onclick="showTab(2, 'container3')">Tab C</div>
+  </div>
+  <div class="tab-content active">Content A3</div>
+  <div class="tab-content">Content B3</div>
+  <div class="tab-content">Content C3</div>
+</div>
+
+<script>
+  function showTab(index, containerId) {
+    const container = document.getElementById(containerId);
+    const buttons = container.querySelectorAll('.tab-button');
+    const contents = container.querySelectorAll('.tab-content');
+
+    buttons.forEach(btn => btn.classList.remove('active'));
+    contents.forEach(content => content.classList.remove('active'));
+
+    buttons[index].classList.add('active');
+    contents[index].classList.add('active');
+  }
+</script>
+
+</body>
+</html
