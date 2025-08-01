@@ -1,0 +1,84 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Multi-City Weather Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-blue-100 min-h-screen flex flex-col items-center justify-start p-6">
+  <div class="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-6">
+    <h1 class="text-2xl font-bold text-center mb-4 text-blue-600">🌤️ Multi-City Weather Dashboard</h1>
+
+    <div class="flex flex-col sm:flex-row gap-3 mb-6">
+      <input
+        id="cityInput"
+        type="text"
+        placeholder="Enter cities: Chennai, Mumbai, Delhi"
+        class="flex-1 px-4 py-2 border rounded-lg focus:outline-none"
+      />
+      <button
+        onclick="getWeather()"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+      >
+        Search
+      </button>
+    </div>
+
+    <div id="weatherContainer" class="grid gap-4 sm:grid-cols-2 md:grid-cols-3"></div>
+    <div id="errorDisplay" class="text-red-600 mt-4 text-center hidden"></div>
+  </div>
+
+  <script>
+    async function getWeather() {
+      const apiKey = '77677bc1f2fff84cac6dd13e302a7315'; // 🔁 Replace this with your actual OpenWeatherMap API key
+      const input = document.getElementById('cityInput').value.trim();
+      const cityList = input.split(',').map(city => city.trim()).filter(Boolean);
+      const weatherContainer = document.getElementById('weatherContainer');
+      const errorDisplay = document.getElementById('errorDisplay');
+
+      weatherContainer.innerHTML = '';
+      errorDisplay.classList.add('hidden');
+
+      if (cityList.length === 0) {
+        errorDisplay.textContent = "Please enter at least one city name.";
+        errorDisplay.classList.remove('hidden');
+        return;
+      }
+
+      for (const city of cityList) {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
+
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error(`City "${city}" not found`);
+          const data = await res.json();
+
+          const card = document.createElement('div');
+          card.className = "bg-white rounded-xl shadow p-4 text-center border";
+
+          card.innerHTML = `
+            <h2 class="text-lg font-semibold mb-1">${data.name}, ${data.sys.country}</h2>
+            <img class="mx-auto" src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" />
+            <p class="capitalize text-gray-700">${data.weather[0].description}</p>
+            <p><strong>Temp:</strong> ${data.main.temp}°C</p>
+            <p><strong>Humidity:</strong> ${data.main.humidity}%</p>
+            <p><strong>Wind:</strong> ${data.wind.speed} m/s</p>
+          `;
+          weatherContainer.appendChild(card);
+        } catch (err) {
+          const errorCard = document.createElement('div');
+          errorCard.className = "bg-red-100 rounded-xl p-4 text-center text-red-600 border border-red-300";
+          errorCard.textContent = err.message;
+          weatherContainer.appendChild(errorCard);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
